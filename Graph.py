@@ -84,13 +84,8 @@ class Graph:
 
         pass
 
-    def vertex_count(self, log=False):
-        n = len(self.verticesList)
-
-        if log:
-            print('number of vetrex in given graph -> ' + str(n) )
-            pass
-        return n
+    def vertex_count(self):
+        return len(self.verticesList)
 
     def vertices(self, prop=False):
         #vertici = []
@@ -117,12 +112,8 @@ class Graph:
             return self.verticesList
             pass
 
-    def edge_count(self, log=False):
-        n = len(self.edgesList)
-        if log:
-            print('number of edge in given graph -> ' + str(n) )
-            pass
-        return n
+    def edge_count(self):
+        return len(self.edgesList)
 
     def edges(self, log=False):
         if log:
