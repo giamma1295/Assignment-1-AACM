@@ -1,31 +1,48 @@
 #classe che conterrà il grafo ed i vari metodi da implementare
 class Graph:
-    """docstring for Graph."""
-
 #costruttore della classe, richiede il passaggio del nome del file da cui caricare la edge list
 
-    def __init__(self, edgeListFile):
+    def __init__(self, edgeListFile, directed = None, weighted = None):
         #super(Graph, self).__init__()
         #apro il file del grafo
         graphFile = open(edgeListFile,'r')
-        self.diGraph = False #variabile che indicherà se il grafo è un grafo diretto
+        self.diGraph = directed #variabile che indicherà se il grafo è un grafo diretto
+        self.gWeigted = weighted #variabile che indicherà se il grafo è un grafo diretto
         #la edge list contine per ogni riga la tupla nodo1 nodo2 peso
         #carichiamo nella variabile
         g = [] #sarà una lista di tuple(nodo1 -> int, nodo2 -> int, peso float)
         #la edge list contine per ogni riga la tupla nodo1 nodo2 peso
         #ciclo per le varie righe del file
-        dictG = {} #dictionary {key -> (u,v) : value -> weight}
         v = []
         ver = {}
         for linea in graphFile.readlines():
             edge = linea.split()
-            edge = (int(edge[0]),int(edge[1]),float(edge[2]))
+            #alla prima ciclata se non è stato specificato se il grafo è
+            #pesato o meno
+            #cerco di derivarlo
+            #un grafo è pesato se per ogni riga della edgelist ho 3 valori nodo1,nodo2,peso
+            #se non è così allora è un grafo non pesato
+            if len(edge) == 3 and (self.gWeigted == None):
+                #grafo pesato
+                print("Graph is weithed")
+                self.gWeigted = True
+
+            elif len(edge) == 2 and (self.gWeigted == None):
+                print("Graph is not weithed")
+                self.gWeigted = False
+            pass
+            if(self.gWeigted == True):
+                edge = (int(edge[0]),int(edge[1]),float(edge[2]))
+            else:
+                edge = (int(edge[0]),int(edge[1]))
+            #se non è stato specificato se si tratta di un grafo diretto o meno
             #in fase di init controllo se il grafo contenuto nel file è un grafo diretto
             #questo è vero se trovo un'arco (u,v) inserendo l'arco (v,u)
-            if not (self.diGraph):
+            if self.diGraph == None:
                 #controllo se è un grafo diretto
                 for e in g:
                     if (e[0] == edge[1] and e[1] == edge[0]):
+                        print("Graph is directed")
                         self.diGraph = True
                         break
                         pass
@@ -33,8 +50,6 @@ class Graph:
                 pass
             #aggiungo l'arco alla lista degli archi
             g.append(edge)
-            dictG.update({'('+str(edge[0])+','+str(edge[1])+')' : float(edge[2])})
-
             #riempio la lista dei nodi
             # --- Open Point, nella descrizione di insert vertrex viene detto
             # must create and return a new vertex with attribute x
@@ -42,31 +57,31 @@ class Graph:
             #per memorizzare la lista dei nodi userò un dizionario {key -> nodo : value -> proprietà}
             if edge[0] not in v:
                 v.append(edge[0])
+                ver.update({str(edge[0]) : None})
                 pass
             if edge[1] not in v:
                 v.append(edge[1])
-                pass
-            pass
-
-            if str(edge[0]) not in ver.keys():
-                ver.update({str(edge[0]) : None})
-                pass
-            if str(edge[1]) not in ver.keys():
                 ver.update({str(edge[1]) : None})
                 pass
             pass
-
-        #print(dictG)
-        #print('richiesto : ' + str(dictG['(131,146)']))
+        #se arrivo qui e diGraph è None allora il grafo non è diretto
+        if self.diGraph == None:
+            self.diGraph = False
+            pass
         self.edgesList = g
-        self.dictGraph = dictG
         self.verticesList = v
         self.verDict = ver
         pass
 
 
-    def printGrafo(self):
-        print(self.edgesList)
+    def info(self):
+        #print(self.edgesList)
+        print("Graph info")
+        print("Directed : " + str(self.diGraph))
+        print("Weigted : " + str(self.gWeigted))
+        print("Number of vertrex : " + str(self.vertex_count()))
+        print("Number of edges : " + str(self.edge_count()))
+
         pass
 
     def vertex_count(self, log=False):
@@ -263,16 +278,71 @@ class Graph:
                     print("Edge " + str(u) + " <-> " + str(v) + " already exist, not inserted nor updated")
                     return None
             pass
-            #insert the new edge
-        edge = (u,v,x)
-
-        self.dictGraph.update({'('+str(u)+','+str(v)+')' : x})
+        #insert the new edge
+        #not weight graph -> we will avoid x, because is useless for that graph
+        edge = ()
+        if not self.gWeigted:
+            edge = (u,v)
+        else:
+            #controllo che x sia None oppure istanza di float
+            if not(x == None or isinstance(x, (int, float))):
+                print(str(x) + " is not a valid weight")
+                print("edge not inserted")
+                return
+            edge = (u,v,x)
+            pass
         self.edgesList.append(edge)
-
+        if u == v:
+            print("Loop succesfully inserted")
+        else:
+            print("Edge succesfully inserted")
         return edge
 
     def remove_vertex(self, v):
+        #given a vertrex v it will be removed from the graph if it's present
+
+        if v not in self.verticesList:
+            #vertrex not Found
+            print("specified vertrex not in the graph")
+            return
+        self.verticesList.remove(v)
+        self.verDict.pop(str(v))
+        r = 0
+        x = len(self.edgesList)
+        for e in self.edgesList:
+            if e[0] == v or e[1] == v:
+                #remove
+                self.edgesList.remove(e)
+                r = r + 1
+                pass
+            pass
+        #test ->
+        #if(len(self.edgesList) == x - r):
+        #    print("ooook")
+        #else:
+        #    print("jjjjj")
+        print("vertex and releate edges removed")
         pass
 
     def remove_edge(self, e):
+        #directed graph
+        if self.diGraph:
+            for ed in self.edgesList:
+                if e[0] == ed[0] and e[1] == ed[1]:
+                    #rimuovi
+                    self.edgesList.remove(ed)
+                    print("Specified Edge succesfully removed")
+                    return
+                pass
+        #non directed graph
+        else:
+            for ed in self.edgesList:
+                if (e[0] == ed[0] and e[1] == ed[1]) or (e[0] == ed[1] and e[1] == ed[0]) :
+                    #rimuovi
+                    self.edgesList.remove(ed)
+                    print("Specified Edge succesfully removed")
+                    return
+                pass
+            return
+        print("Specified edge not found in graph")
         pass
