@@ -15,6 +15,7 @@ class Graph:
         #la edge list contine per ogni riga la tupla nodo1 nodo2 peso
         #ciclo per le varie righe del file
         dictG = {} #dictionary {key -> (u,v) : value -> weight}
+        v = {}
         for linea in graphFile.readlines():
             edge = linea.split()
             edge = (int(edge[0]),int(edge[1]),float(edge[2]))
@@ -29,18 +30,32 @@ class Graph:
                         pass
                     pass
                 pass
+            #aggiungo l'arco alla lista degli archi
             g.append(edge)
             dictG.update({'('+str(edge[0])+','+str(edge[1])+')' : float(edge[2])})
+
+            #riempio la lista dei nodi
+            # --- Open Point, nella descrizione di insert vertrex viene detto
+            # must create and return a new vertex with attribute x
+            #immagino che ogni verice potrebbe avere delle proprietà, ad esempio associamo ad un vertice un nome
+            #per memorizzare la lista dei nodi userò un dizionario {key -> nodo : value -> proprietà}
+            if edge[0] not in vertici:
+                v.append(v[0])
+                pass
+            if edge[1] not in vertici:
+                v.append(v[1])
+                pass
             pass
         #print(dictG)
         #print('richiesto : ' + str(dictG['(131,146)']))
-        self.graph = g
+        self.edges = g
         self.dictGraph = dictG
+        self.vertices = v
         pass
 
 
     def printGrafo(self):
-        print(self.graph)
+        print(self.edges)
         pass
 
     def vertex_count(self, log=False):
@@ -51,28 +66,37 @@ class Graph:
             pass
         return n
 
-    def vertices(self, log=False, ordered=False):
-        vertici = []
+    def vertices(self, log=False, prop=False):
+        #vertici = []
 
-        for v in self.graph:
-            if v[0] not in vertici:
-                vertici.append(v[0])
-                pass
-            if v[1] not in vertici:
-                vertici.append(v[1])
-                pass
-            pass
-        if ordered:
-            vertici.sort()
-            pass
+        #for v in self.edges:
+        #    if v[0] not in vertici:
+        #        vertici.append(v[0])
+        #        pass
+        #    if v[1] not in vertici:
+        #        vertici.append(v[1])
+        #        pass
+        #    pass
+
+        #if ordered:
+        #    vertici.sort()
+        #    pass
+
+
         if log:
-            print("Vertrex List  -> \n " + str(vertici))
+            print("Vertrex List  -> \n " + str(self.vertices.keys()))
             #print('\n'.join(map(str, vertici)))
             pass
-        return vertici
-
+        if prop:
+            #ritorno il dizionario dei nodi con eventuali proprietà dei nodi
+            return self.vertices
+        else:
+            #ritorno lista di nodi senza eventuali proprietà
+            return self.vertices.keys()
+            pass
+            
     def edge_count(self, log=False):
-        n = len(self.graph)
+        n = len(self.edges)
         if log:
             print('number of edge in given graph -> ' + str(n) )
             pass
@@ -81,20 +105,20 @@ class Graph:
     def edges(self, log=False):
         if log:
             print('edges in given graph : ')
-            print('\n'.join(map(str, map(lambda x: {'nodo -> ':x[1], 'id -> ':x[0]}, enumerate(self.graph)))))
+            print('\n'.join(map(str, map(lambda x: {'nodo -> ':x[1], 'id -> ':x[0]}, enumerate(self.edges)))))
             pass
-        return self.graph
+        return self.edges
 
     def get_edge(self, u, v, log=False):
         selected = None
-        for ver in self.graph:
+        for ver in self.edges:
             if self.diGraph:
-                if (ver[0] == u and ver[1] == v)) :
+                if (ver[0] == u and ver[1] == v) :
                     selected = ver
                     print("grafo diretto")
                     pass
             else:
-                if (ver[0] == u and ver[1] == v) or ((ver[1] == u and ver[0] == v)) :
+                if (ver[0] == u and ver[1] == v) or (ver[1] == u and ver[0] == v) :
                     selected = ver
                     print("grafo non diretto")
                     pass
