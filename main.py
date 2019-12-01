@@ -8,7 +8,9 @@ from Graph import Graph
 grafo = Graph('grafi/USAir97.net')
 
 #print del grafo
-#grafo.printGrafo()
+grafo.printGrafo()
+
+grafo.diGraph
 
 #vertex_count
 #con log
@@ -33,4 +35,4 @@ grafo.edge_count(True)
 grafo.edges()
 
 #get_edge(self, u, v, log=False)
-grafo.get_edge(8, 37, True)
+grafo.get_edge(201, 118, True)

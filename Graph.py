@@ -8,18 +8,30 @@ class Graph:
         #super(Graph, self).__init__()
         #apro il file del grafo
         graphFile = open(edgeListFile,'r')
+        self.diGraph = False #variabile che indicherà se il grafo è un grafo diretto
         #la edge list contine per ogni riga la tupla nodo1 nodo2 peso
         #carichiamo nella variabile
-        g = [] #will be a list of sets(nodo1 -> int, nodo2 -> int, peso float)
+        g = [] #sarà una lista di tuple(nodo1 -> int, nodo2 -> int, peso float)
         #la edge list contine per ogni riga la tupla nodo1 nodo2 peso
         #ciclo per le varie righe del file
         dictG = {} #dictionary {key -> (u,v) : value -> weight}
         for linea in graphFile.readlines():
             edge = linea.split()
             edge = (int(edge[0]),int(edge[1]),float(edge[2]))
+            #in fase di init controllo se il grafo contenuto nel file è un grafo diretto
+            #questo è vero se trovo un'arco (u,v) inserendo l'arco (v,u)
+            if not (self.diGraph):
+                #controllo se è un grafo diretto
+                for e in g:
+                    if (e[0] == edge[1] and e[1] == edge[0]):
+                        self.diGraph = True
+                        break
+                        pass
+                    pass
+                pass
             g.append(edge)
             dictG.update({'('+str(edge[0])+','+str(edge[1])+')' : float(edge[2])})
-        pass
+            pass
         #print(dictG)
         #print('richiesto : ' + str(dictG['(131,146)']))
         self.graph = g
@@ -76,8 +88,16 @@ class Graph:
     def get_edge(self, u, v, log=False):
         selected = None
         for ver in self.graph:
-            if (ver[0] == u and ver[1] == v) or ((ver[1] == u and ver[0] == v)) :
-                selected = ver
+            if self.diGraph:
+                if (ver[0] == u and ver[1] == v)) :
+                    selected = ver
+                    print("grafo diretto")
+                    pass
+            else:
+                if (ver[0] == u and ver[1] == v) or ((ver[1] == u and ver[0] == v)) :
+                    selected = ver
+                    print("grafo non diretto")
+                    pass
                 pass
         if log:
             if selected == None:
@@ -86,4 +106,21 @@ class Graph:
                 print("requested vertrex -> " + str(selected))
             pass
         return selected
+
+    def degree(self, v, out=True):
+        pass
+
+    def incident_edges(self, v, out=True):
+        pass
+
+    def insert_vertex(self, x=None):
+        pass
+
+    def insert_edge(self, u, v, x=None):
+        pass
+
+    def remove_vertex(self, v):
+        pass
+
+    def remove_edge(self, e):
         pass
