@@ -156,7 +156,7 @@ class Graph:
                         deg = deg + 1
                         pass
                     pass
-                print("node " + str(v) + " outDegree :")
+                print("vertrex " + str(v) + " outDegree :")
                 pass
             #out -> false calcoliamo la indegree
             else:
@@ -165,7 +165,7 @@ class Graph:
                         deg = deg + 1
                         pass
                     pass
-                print("node " + str(v) + " inDegree :")
+                print("vertrex " + str(v) + " inDegree :")
                 pass
             pass
         #grafo non diretto
@@ -176,7 +176,7 @@ class Graph:
                     deg = deg + 1
                     pass
                 pass
-            print("node " + str(v) + " degree :")
+            print("vertrex " + str(v) + " degree :")
             pass
         print(deg)
         return deg
@@ -219,10 +219,57 @@ class Graph:
         return inc
 
     def insert_vertex(self, x=None):
-        pass
+        #this function will insert into the graph a new vertrex
+        #it will be added in both self.verticesList self.verDict
+
+        #the new vertrex id will be the highest vertrex id from verticesList + 1
+        nodeId = max(self.verticesList) + 1
+        self.verticesList.append(nodeId)
+        self.verDict.update({str(nodeId) : x})
+        print("New vertex added is : Id -> " + str(nodeId) + " - prop -> " + str(x) )
+        return {str(nodeId) : x}
 
     def insert_edge(self, u, v, x=None):
-        pass
+        #this method will insert a new vertrex in our graph
+
+        #----Open Point if u or v are not in our graph what i need to do?
+        #----reuturn none and write a log to specify why the edge was not addet into the graph?
+        #----add the missing vertrex and create the vertrex?
+
+        #for now i will do the first
+
+        if u not in self.verticesList and v not in self.verticesList:
+            print("Node " + str(u) + " or node " + str(v) + " not exist in the graph")
+            return None
+
+        #both vertrex are present in our graph
+        #----Open Point if the edge is already present in our graph:
+        #----1) Do nothing -> return None and put a log to  inform the user?
+        #----2) Update the edge weight and put a log to inform the user?
+
+        #for the moment i will take the first way
+        for e in self.edgesList:
+            if self.diGraph:
+                if e[0] == u and e[1] == v:
+                    #edge exist
+                    exist = True
+                    print("Edge " + str(u) + " -> " + str(v) + " already exist, not inserted nor updated")
+                    return None
+
+            else:
+                if (e[0] == u and e[1] == v) or (e[1] == u and e[0] == v):
+                    #edge exist
+                    exist = True
+                    print("Edge " + str(u) + " <-> " + str(v) + " already exist, not inserted nor updated")
+                    return None
+            pass
+            #insert the new edge
+        edge = (u,v,x)
+
+        self.dictGraph.update({'('+str(u)+','+str(v)+')' : x})
+        self.edgesList.append(edge)
+
+        return edge
 
     def remove_vertex(self, v):
         pass

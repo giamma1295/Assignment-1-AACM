@@ -38,4 +38,14 @@ grafo.edges()
 #get_edge(self, u, v, log=False)
 grafo.get_edge(201, 118, True)
 
-grafo.degree(201)
+grafo.degree(338, True)
+
+grafo.incident_edges(201, False)
+
+grafo.insert_vertex()
+
+
+
+
+
+grafo.insert_edge(10, 29, 12.0)
