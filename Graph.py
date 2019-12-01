@@ -15,7 +15,8 @@ class Graph:
         #la edge list contine per ogni riga la tupla nodo1 nodo2 peso
         #ciclo per le varie righe del file
         dictG = {} #dictionary {key -> (u,v) : value -> weight}
-        v = {}
+        v = []
+        ver = {}
         for linea in graphFile.readlines():
             edge = linea.split()
             edge = (int(edge[0]),int(edge[1]),float(edge[2]))
@@ -39,37 +40,47 @@ class Graph:
             # must create and return a new vertex with attribute x
             #immagino che ogni verice potrebbe avere delle proprietà, ad esempio associamo ad un vertice un nome
             #per memorizzare la lista dei nodi userò un dizionario {key -> nodo : value -> proprietà}
-            if edge[0] not in vertici:
-                v.append(v[0])
+            if edge[0] not in v:
+                v.append(edge[0])
                 pass
-            if edge[1] not in vertici:
-                v.append(v[1])
+            if edge[1] not in v:
+                v.append(edge[1])
                 pass
             pass
+
+            if str(edge[0]) not in ver.keys():
+                ver.update({str(edge[0]) : None})
+                pass
+            if str(edge[1]) not in ver.keys():
+                ver.update({str(edge[1]) : None})
+                pass
+            pass
+
         #print(dictG)
         #print('richiesto : ' + str(dictG['(131,146)']))
-        self.edges = g
+        self.edgesList = g
         self.dictGraph = dictG
-        self.vertices = v
+        self.verticesList = v
+        self.verDict = ver
         pass
 
 
     def printGrafo(self):
-        print(self.edges)
+        print(self.edgesList)
         pass
 
     def vertex_count(self, log=False):
-        n = len(self.vertices())
+        n = len(self.verticesList)
 
         if log:
             print('number of vetrex in given graph -> ' + str(n) )
             pass
         return n
 
-    def vertices(self, log=False, prop=False):
+    def vertices(self, prop=False):
         #vertici = []
 
-        #for v in self.edges:
+        #for v in self.edgesList:
         #    if v[0] not in vertici:
         #        vertici.append(v[0])
         #        pass
@@ -81,22 +92,18 @@ class Graph:
         #if ordered:
         #    vertici.sort()
         #    pass
-
-
-        if log:
-            print("Vertrex List  -> \n " + str(self.vertices.keys()))
-            #print('\n'.join(map(str, vertici)))
-            pass
         if prop:
+            print("aaaa")
             #ritorno il dizionario dei nodi con eventuali proprietà dei nodi
-            return self.vertices
+            return self.verDict
         else:
+            print("bbbbb")
             #ritorno lista di nodi senza eventuali proprietà
-            return self.vertices.keys()
+            return self.verticesList
             pass
-            
+
     def edge_count(self, log=False):
-        n = len(self.edges)
+        n = len(self.edgesList)
         if log:
             print('number of edge in given graph -> ' + str(n) )
             pass
@@ -105,13 +112,13 @@ class Graph:
     def edges(self, log=False):
         if log:
             print('edges in given graph : ')
-            print('\n'.join(map(str, map(lambda x: {'nodo -> ':x[1], 'id -> ':x[0]}, enumerate(self.edges)))))
+            print('\n'.join(map(str, map(lambda x: {'nodo -> ':x[1], 'id -> ':x[0]}, enumerate(self.edgesList)))))
             pass
-        return self.edges
+        return self.edgesList
 
     def get_edge(self, u, v, log=False):
         selected = None
-        for ver in self.edges:
+        for ver in self.edgesList:
             if self.diGraph:
                 if (ver[0] == u and ver[1] == v) :
                     selected = ver
@@ -132,7 +139,44 @@ class Graph:
         return selected
 
     def degree(self, v, out=True):
-        pass
+        deg = 0
+        #out è indifferente per grafi non diretti
+        #per i grafi non diretti non la inDegree e la outDegree coincidono, per calcolare il degree di un nodo in questo grafo
+        #per i grafi diretti invece bisogna tenere conto di out, se è true ci restituirà la outDegree, numero di archi partenti(outgoing)
+        #dal nodo specificato
+        #se out è false allora calcoliamo la in degree, cioè il numero di archi entranti(ingoing) nel nodo specificato
+        #nelle nostre tuple abbiamo : [0]-> nodo da cui parte l'arco, [1] -> nodo su cui atterra l'arco, [2] -> peso
+
+        #grafo diretto
+        if self.diGraph:
+            #out -> true calcoliamo la outdegree
+            if out:
+                for x in self.edgesList:
+                    if v == x[0]:
+                        deg = deg + 1
+                        pass
+                    pass
+                pass
+            #out -> false calcoliamo la indegree
+            else:
+                for x in self.edgesList:
+                    if v == x[1]:
+                        deg = deg + 1
+                        pass
+                    pass
+                pass
+            pass
+        #grafo non diretto
+        else:
+            #calcolo il degree
+            for x in self.edgesList:
+                if v == x[0] or v == x[1]:
+                    deg = deg + 1
+                    pass
+                pass
+            pass
+
+        return deg
 
     def incident_edges(self, v, out=True):
         pass

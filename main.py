@@ -11,6 +11,7 @@ grafo = Graph('grafi/USAir97.net')
 grafo.printGrafo()
 
 grafo.diGraph
+grafo.verDict
 
 #vertex_count
 #con log
@@ -21,7 +22,7 @@ grafo.vertex_count(True)
 
 #vertices
 #con log
-grafo.vertices(ordered=True)
+grafo.vertices(True)
 
 #senza log
 #grafo.vertices()
