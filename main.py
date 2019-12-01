@@ -37,3 +37,5 @@ grafo.edges()
 
 #get_edge(self, u, v, log=False)
 grafo.get_edge(201, 118, True)
+
+grafo.degree(201)

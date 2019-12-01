@@ -156,6 +156,7 @@ class Graph:
                         deg = deg + 1
                         pass
                     pass
+                print("node " + str(v) + " outDegree :")
                 pass
             #out -> false calcoliamo la indegree
             else:
@@ -164,6 +165,7 @@ class Graph:
                         deg = deg + 1
                         pass
                     pass
+                print("node " + str(v) + " inDegree :")
                 pass
             pass
         #grafo non diretto
@@ -174,12 +176,47 @@ class Graph:
                     deg = deg + 1
                     pass
                 pass
+            print("node " + str(v) + " degree :")
             pass
-
+        print(deg)
         return deg
 
     def incident_edges(self, v, out=True):
-        pass
+        inc = []
+        #stesse premesse per il metodo degree
+        #grafo diretto
+        if self.diGraph:
+            #out -> true calcoliamo la outdegree
+            if out:
+                for x in self.edgesList:
+                    if v == x[0]:
+                        inc.append(x)
+                        pass
+                    pass
+                print("list of incident edges outgoing " + str(v) + " :")
+                pass
+            #out -> false calcoliamo la indegree
+            else:
+                for x in self.edgesList:
+                    if v == x[1]:
+                        inc.append(x)
+                        pass
+                    pass
+                print("list of incident edges ingoing " + str(v) + " :")
+                pass
+            pass
+        #grafo non diretto
+        else:
+            #calcolo il degree
+            for x in self.edgesList:
+                if v == x[0] or v == x[1]:
+                    inc.append(x)
+                    pass
+                pass
+            print("list of incident edges " + str(v) + " :")
+            pass
+        print(inc)
+        return inc
 
     def insert_vertex(self, x=None):
         pass
