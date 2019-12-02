@@ -6,7 +6,7 @@ from Graph import Graph
 
 #carico il grafo
 
-grafo = Graph('grafi/pesatoDiretto.txt')
+grafo = Graph('grafi/USAir97.net')
 
 #print del grafo
 grafo.info()
