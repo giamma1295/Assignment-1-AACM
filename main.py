@@ -1,6 +1,6 @@
 #estenzioni per iPython affinchè al cambiamento di un modulo viene ricaricato a runtime
-%load_ext autoreload
-%autoreload 2
+#%load_ext autoreload
+#%autoreload 2
 from Graph import Graph
 
 
